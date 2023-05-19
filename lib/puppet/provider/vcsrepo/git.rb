@@ -611,7 +611,7 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
 
   # @!visibility private
   def safe_directories
-    args = ['config', '--global', '--get-all', 'safe.directory']
+    args = ['config', '--system', '--get-all', 'safe.directory']
     begin
       d = git_with_identity(*args) || ''
       d.split('\n')
@@ -637,7 +637,7 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
   # @!visibility private
   def add_safe_directory
     notice("Adding '#{@resource.value(:path)}' to safe directory list")
-    args = ['config', '--global', '--add', 'safe.directory', @resource.value(:path)]
+    args = ['config', '--system', '--add', 'safe.directory', @resource.value(:path)]
     git_with_identity(*args)
   end
 
@@ -646,7 +646,7 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
     return unless safe_directories.include?(@resource.value(:path))
 
     notice("Removing '#{@resource.value(:path)}' from safe directory list")
-    args = ['config', '--global', '--unset', 'safe.directory', @resource.value(:path)]
+    args = ['config', '--system', '--unset', 'safe.directory', @resource.value(:path)]
     git_with_identity(*args)
   end
 
